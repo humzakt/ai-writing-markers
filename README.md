@@ -12,6 +12,11 @@ task_categories:
 - text-classification
 size_categories:
 - n<1K
+configs:
+- config_name: default
+  data_files:
+  - split: train
+    path: markers.jsonl
 ---
 
 # ai-writing-markers
@@ -47,6 +52,7 @@ that guide and other 2026 sources into a structured, cited dataset.
 | File | Purpose |
 |------|---------|
 | [`markers.json`](markers.json) | The dataset. 6 categories, 87+ markers, each with notes and source ids. Source of truth. |
+| [`markers.jsonl`](markers.jsonl) | Flattened, one-row-per-marker view (powers the HF dataset viewer). Generated from `markers.json`. |
 | [`check.py`](check.py) | Zero-dependency CLI that scans a file against `markers.json`. |
 | [`SOURCES.md`](SOURCES.md) | Every source, with links. |
 | [`data/`](data/) | Human-readable explainers per category. |
