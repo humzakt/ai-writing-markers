@@ -2,14 +2,40 @@
 license: mit
 language:
 - en
+language_creators:
+- expert-generated
+annotations_creators:
+- expert-generated
+multilinguality:
+- monolingual
+source_datasets:
+- original
 pretty_name: AI Writing Markers
 tags:
 - ai-detection
-- writing
-- text-analysis
+- ai-generated-text
 - llm
+- llm-detection
+- gpt
+- chatgpt
+- machine-generated-text
+- writing
+- writing-style
+- text-analysis
+- linguistics
+- stylometry
+- academic-integrity
+- content-moderation
+- lexicon
+- word-list
+- burstiness
+- perplexity
+- wikipedia
+- ai-cleanup
 task_categories:
 - text-classification
+task_ids:
+- acceptability-classification
 size_categories:
 - n<1K
 configs:
