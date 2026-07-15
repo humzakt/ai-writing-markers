@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Writing Markers</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 900px; margin: 0 auto; padding: 24px; line-height: 1.5;
+  }
+  h1 { margin-bottom: 4px; }
+  .sub { color: #666; margin-top: 0; }
+  .warn {
+    border-left: 4px solid #d19a00; background: rgba(209,154,0,.08);
+    padding: 10px 14px; border-radius: 6px; margin: 16px 0; font-size: .95rem;
+  }
+  textarea {
+    width: 100%; min-height: 220px; padding: 12px; font-size: 15px;
+    border: 1px solid #8884; border-radius: 8px; resize: vertical;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .row { display: flex; gap: 10px; align-items: center; margin: 12px 0; flex-wrap: wrap; }
+  button {
+    padding: 9px 16px; border: 0; border-radius: 8px; font-size: 15px;
+    cursor: pointer; background: #2d7d46; color: #fff;
+  }
+  button.ghost { background: #8883; color: inherit; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 8px 0 18px; }
+  .stat { font-size: .95rem; }
+  .stat b { font-variant-numeric: tabular-nums; }
+  .cat { border: 1px solid #8883; border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
+  .cat h3 { margin: 0 0 6px; font-size: 1rem; }
+  .zero { opacity: .55; }
+  .chip {
+    display: inline-block; background: #2d7d4622; border: 1px solid #2d7d4655;
+    border-radius: 999px; padding: 1px 9px; margin: 2px 4px 2px 0; font-size: .85rem;
+    font-family: ui-monospace, monospace;
+  }
+  code { background: #8882; padding: 1px 5px; border-radius: 4px; }
+  a { color: #2d7d46; }
+  .verdict-low { color: #c0392b; }
+  .verdict-mid { color: #b8860b; }
+  .verdict-ok { color: #2d7d46; }
+  footer { margin-top: 28px; font-size: .85rem; color: #777; }
+</style>
+</head>
+<body>
+  <h1>AI Writing Markers</h1>
+  <p class="sub">Scan text for documented markers of AI-generated writing. Runs entirely in your browser.</p>
+
+  <div class="warn">
+    <b>This is not an AI detector.</b> Markers are weak signals, not proof of authorship.
+    Detection is biased against non-native and academic writing (up to ~61% false
+    positives in one peer-reviewed study). Use results only as a prompt for a closer
+    human read. Source and dataset:
+    <a href="https://github.com/humzakt/ai-writing-markers">GitHub</a>.
+  </div>
+
+  <textarea id="input" placeholder="Paste an essay, paragraph, or draft here..."></textarea>
+  <div class="row">
+    <button id="scan">Scan</button>
+    <button class="ghost" id="ex-ai">Load AI-flavoured example</button>
+    <button class="ghost" id="ex-human">Load human example</button>
+    <button class="ghost" id="clear">Clear</button>
+  </div>
+
+  <div id="report"></div>
+
+  <footer>
+    Dataset and checker are open source (MIT / CC0). Marker catalogue distilled from
+    Wikipedia's WikiProject AI Cleanup guide and 2026 detector research.
+  </footer>
+
+<script>
+const EXAMPLE_AI =
+  "In today's fast-paced world, it is important to note that artificial intelligence " +
+  "stands as a testament to human ingenuity. Moreover, we must delve into the rich " +
+  "tapestry of innovation. Furthermore, these robust, seamless, and transformative " +
+  "solutions underscore the importance of leveraging cutting-edge technology.";
+
+const EXAMPLE_HUMAN =
+  "The counseling office had two chairs and a broken clock. I waited anyway. Most " +
+  "students never make it that far, and I understood why the moment the receptionist " +
+  "asked, loudly, what was wrong with me. Stigma is not abstract here. It has a front desk.";
+
+const LEXICAL = new Set(["vocabulary", "transitions", "phrases"]);
+let MARKERS = null;
+
+function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+function wordCount(text) { return (text.match(/[A-Za-z0-9_'-]+/g) || []).length; }
+
+function splitSentences(text) {
+  return text.trim().split(/(?<=[.!?])\s+/).filter(s => s.trim().length);
+}
+
+function findLexical(term, text, sentenceStart) {
+  let escaped = escapeRegex(term).replace(/\\ /g, "\\s+");
+  let pattern;
+  if (sentenceStart) {
+    pattern = "(?:(?<=^)|(?<=[.!?]\\s)|(?<=\\n))" + escaped + "\\b";
+  } else if (/\w/.test(term[0])) {
+    pattern = "\\b" + escaped + "\\b";
+  } else {
+    pattern = escaped;
+  }
+  try {
+    return (text.match(new RegExp(pattern, "gim")) || []).length;
+  } catch (e) { return 0; }
+}
+
+function countRegex(pattern, text) {
+  try {
+    return (text.match(new RegExp(pattern, "gim")) || []).length;
+  } catch (e) { return 0; }  // skip patterns JS can't compile (e.g. \U escapes)
+}
+
+function ruleOfThree(text) {
+  const pat = /\b[\w-]+,\s+[\w-]+,?\s+(?:and|or)\s+[\w-]+\b/gi;
+  return (text.match(pat) || []).length;
+}
+
+function stdev(arr) {
+  const m = arr.reduce((a, b) => a + b, 0) / arr.length;
+  const v = arr.reduce((a, b) => a + (b - m) ** 2, 0) / arr.length;
+  return Math.sqrt(v);
+}
+
+function analyze(text) {
+  const nWords = Math.max(wordCount(text), 1);
+  const sentences = splitSentences(text);
+  const lengths = sentences.length ? sentences.map(wordCount) : [0];
+  const cats = [];
+
+  for (const cat of MARKERS.categories) {
+    const hits = [];
+    if (LEXICAL.has(cat.id)) {
+      for (const m of cat.markers) {
+        const c = findLexical(m.term, text, m.position === "sentence_start");
+        if (c) hits.push({ term: m.term, count: c });
+      }
+    } else if (cat.id === "structural" || cat.id === "punctuation_format") {
+      for (const m of cat.markers) {
+        if (!m.regex) continue;
+        const c = countRegex(m.regex, text);
+        if (c) hits.push({ term: m.term, count: c });
+      }
+      if (cat.id === "structural") {
+        const r3 = ruleOfThree(text);
+        if (r3) hits.push({ term: "rule_of_three", count: r3 });
+      }
+    }
+    const total = hits.reduce((a, h) => a + h.count, 0);
+    hits.sort((a, b) => b.count - a.count);
+    cats.push({
+      label: cat.label, total,
+      per1000: Math.round((total / nWords) * 1000 * 100) / 100,
+      hits
+    });
+  }
+
+  const mLen = lengths.reduce((a, b) => a + b, 0) / lengths.length;
+  const burstiness = mLen ? Math.round((stdev(lengths) / mLen) * 1000) / 1000 : 0;
+  const tokens = (text.toLowerCase().match(/[a-z0-9_'-]+/g) || []);
+  const ttr = Math.round((new Set(tokens).size / Math.max(tokens.length, 1)) * 1000) / 1000;
+
+  return {
+    words: nWords, sentences: sentences.length,
+    meanLen: Math.round(mLen * 10) / 10,
+    minLen: Math.min(...lengths), maxLen: Math.max(...lengths),
+    burstiness, ttr, cats
+  };
+}
+
+function verdict(b) {
+  if (b >= 0.6) return ['verdict-ok', 'human-typical (0.65+ is common in human prose)'];
+  if (b >= 0.4) return ['verdict-mid', 'middling; add more sentence-length variation'];
+  return ['verdict-low', 'low; AI-typical. Vary sentence length aggressively'];
+}
+
+function render(r) {
+  const [vc, vt] = verdict(r.burstiness);
+  const grand = r.cats.reduce((a, c) => a + c.total, 0);
+  let html = `<div class="stats">
+    <span class="stat">words <b>${r.words}</b></span>
+    <span class="stat">sentences <b>${r.sentences}</b></span>
+    <span class="stat">sentence length <b>${r.meanLen}</b> (min ${r.minLen}, max ${r.maxLen})</span>
+    <span class="stat">burstiness <b>${r.burstiness}</b> <span class="${vc}">${vt}</span></span>
+    <span class="stat">type-token ratio <b>${r.ttr}</b></span>
+  </div>`;
+  for (const c of r.cats) {
+    html += `<div class="cat ${c.total ? '' : 'zero'}"><h3>${c.label} — ${c.total}` +
+      (c.total ? ` <small>(${c.per1000}/1k words)</small>` : '') + `</h3>`;
+    if (c.total) html += c.hits.map(h => `<span class="chip">${h.term} ×${h.count}</span>`).join("");
+    html += `</div>`;
+  }
+  html += `<p><b>Total marker hits: ${grand}.</b> Clustering matters more than any single
+    hit; a few in a long document is ordinary human writing.</p>`;
+  document.getElementById("report").innerHTML = html;
+}
+
+async function boot() {
+  try {
+    MARKERS = await (await fetch("markers.json")).json();
+  } catch (e) {
+    document.getElementById("report").innerHTML =
+      "<p class='verdict-low'>Could not load markers.json.</p>";
+  }
+}
+document.getElementById("scan").onclick = () => {
+  if (MARKERS) render(analyze(document.getElementById("input").value));
+};
+document.getElementById("ex-ai").onclick = () => { document.getElementById("input").value = EXAMPLE_AI; };
+document.getElementById("ex-human").onclick = () => { document.getElementById("input").value = EXAMPLE_HUMAN; };
+document.getElementById("clear").onclick = () => {
+  document.getElementById("input").value = "";
+  document.getElementById("report").innerHTML = "";
+};
+boot();
+</script>
+</body>
+</html>

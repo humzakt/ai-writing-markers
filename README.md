@@ -51,7 +51,8 @@ that guide and other 2026 sources into a structured, cited dataset.
 | [`SOURCES.md`](SOURCES.md) | Every source, with links. |
 | [`data/`](data/) | Human-readable explainers per category. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add or correct a marker. |
-| [`space/`](space/) | Gradio app for the Hugging Face Space demo. |
+| [`space/`](space/) | Gradio app for a Hugging Face Space (needs PRO to host). |
+| [`space-static/`](space-static/) | Static, client-side Space (free to host) — the deployed one. |
 | [`HUGGINGFACE.md`](HUGGINGFACE.md) | How to publish as an HF Dataset and Space. |
 
 ## Marker categories
@@ -76,9 +77,15 @@ that guide and other 2026 sources into a structured, cited dataset.
 
 ## Also on Hugging Face
 
-This repo doubles as a Hugging Face **Dataset** (the marker catalogue) and powers a
-Gradio **Space** (a live checker). See [`HUGGINGFACE.md`](HUGGINGFACE.md) for one-command
-publishing steps.
+- **Live demo (Space):** https://huggingface.co/spaces/humzakt/ai-writing-markers — a
+  browser-only checker; paste text and scan, nothing leaves your machine.
+- **Dataset:** https://huggingface.co/datasets/humzakt/ai-writing-markers — the marker
+  catalogue as a reusable dataset.
+
+The deployed Space is **static** (client-side JS), because Hugging Face requires a PRO
+plan to host Gradio Spaces on the free tier. A Gradio version lives in [`space/`](space/);
+the static one is in [`space-static/`](space-static/). See [`HUGGINGFACE.md`](HUGGINGFACE.md)
+for publishing steps.
 
 ## Install
 
