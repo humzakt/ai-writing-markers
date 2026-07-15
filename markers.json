@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "name": "ai-writing-markers",
+  "description": "A curated, source-backed dataset of textual markers associated with AI-generated (LLM) writing. Intended as a transparency and self-editing aid, NOT as a reliable AI detector. Presence of these markers is a weak signal, not proof of authorship.",
+  "updated": "2026-07-15",
+  "license": "CC0-1.0 (data) / MIT (code)",
+  "disclaimer": "AI-detection is probabilistic and error-prone. Independent studies report false-positive rates from ~5% to over 60% on genuine human writing, with non-native English and formal academic prose hit hardest. Do not use these markers, or any tool built on them, as sole evidence of misconduct.",
+  "sources": [
+    { "id": "wikipedia_aisigns", "title": "Wikipedia: Signs of AI writing", "url": "https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing" },
+    { "id": "wikipedia_aicleanup", "title": "Wikipedia: WikiProject AI Cleanup", "url": "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup" },
+    { "id": "kompozy", "title": "AI content detection in 2026: how the detectors actually work (Kompozy)", "url": "https://kompozy.io/ai-content/content-detection" },
+    { "id": "textsight_how", "title": "How AI Detectors Work (2026): Perplexity, Burstiness & Classifiers (TextSight)", "url": "https://www.textsight.ai/how-ai-detectors-work/" },
+    { "id": "eyesift_pb", "title": "Perplexity and Burstiness in AI Detection (eyesift)", "url": "https://www.eyesift.com/blog/perplexity-and-burstiness-ai-detection/" },
+    { "id": "humanizemyai", "title": "Are AI Detectors Accurate? False Positive Rates & Real Benchmarks 2026 (HumanizeMyAI)", "url": "https://humanizemy.ai/ai-detector-accuracy" },
+    { "id": "thesify", "title": "How Do Professors Detect AI in 2026? (thesify)", "url": "https://www.thesify.ai/blog/how-professors-detect-ai-writing-2026-guide" },
+    { "id": "leap_pb", "title": "Perplexity vs Burstiness: Why AI Detectors Flag Text (Leap AI)", "url": "https://www.tryleap.ai/learn/perplexity-vs-burstiness" },
+    { "id": "vortenza_pb", "title": "What Is Perplexity and Burstiness in AI Writing? 2026 Guide (Vortenza)", "url": "https://www.vortenza.com/guides/perplexity-burstiness-ai-writing" },
+    { "id": "alston", "title": "300+ Overused ChatGPT Words to Avoid, 2026 List (Alston Antony)", "url": "https://alstonantony.com/ai-seo/avoid-chatgpt-words-phrases-seo/" },
+    { "id": "walterwrites", "title": "Most Common ChatGPT Words to Avoid in 2026 (Walter Writes AI)", "url": "https://walterwrites.ai/most-common-chatgpt-words-to-avoid/" },
+    { "id": "stanford_toefl", "title": "Liang et al., GPT detectors are biased against non-native English writers, Patterns 2023", "url": "https://doi.org/10.1016/j.patter.2023.100779" },
+    { "id": "aiphrasefinder", "title": "100 Common ChatGPT Phrases (AI Phrase Finder)", "url": "https://aiphrasefinder.com/common-chatgpt-phrases/" },
+    { "id": "aifreeforever", "title": "How to Tell If Something Was Written by ChatGPT (AI Free Forever)", "url": "https://aifreeforever.com/blog/how-to-tell-if-something-was-written-by-chatgpt" }
+  ],
+  "categories": [
+    {
+      "id": "vocabulary",
+      "label": "Overused vocabulary",
+      "detector_signal": "lexical frequency / n-gram distribution",
+      "description": "Individual words that appear in LLM output at far higher rates than in comparable human writing. A single instance means little; clustering is the signal. Overused sets drift by model era.",
+      "remediation": "Prefer the plain word. Replace abstract nouns and inflated verbs with concrete, specific alternatives. A word being AI-overused does NOT mean its synonyms are; do not blind-swap.",
+      "markers": [
+        { "term": "delve", "kind": "word", "era": "2023-mid2024", "note": "The canonical tell; usage in academic papers spiked ~25x post-ChatGPT. Faded sharply in 2025.", "sources": ["wikipedia_aisigns", "alston"] },
+        { "term": "tapestry", "kind": "word", "era": "2023-mid2024", "note": "As an abstract noun ('rich tapestry of').", "sources": ["wikipedia_aisigns", "walterwrites"] },
+        { "term": "testament", "kind": "word", "era": "2023-mid2024", "note": "'a testament to'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "underscore", "kind": "word", "era": "2023-2026", "note": "Figurative use ('underscores the importance of'). Grok still overuses it as of 2026.", "sources": ["wikipedia_aisigns"] },
+        { "term": "pivotal", "kind": "word", "era": "2023-2026", "sources": ["wikipedia_aisigns", "walterwrites"] },
+        { "term": "crucial", "kind": "word", "era": "2023-2026", "sources": ["wikipedia_aisigns", "walterwrites"] },
+        { "term": "vital", "kind": "word", "era": "2023-2026", "sources": ["wikipedia_aisigns"] },
+        { "term": "robust", "kind": "word", "era": "2023-2026", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "seamless", "kind": "word", "era": "2024-2026", "sources": ["alston", "walterwrites"] },
+        { "term": "leverage", "kind": "word", "era": "2023-2026", "note": "As a verb meaning 'use'.", "sources": ["walterwrites", "alston"] },
+        { "term": "harness", "kind": "word", "era": "2023-2026", "note": "As a verb ('harness the power of').", "sources": ["walterwrites"] },
+        { "term": "utilize", "kind": "word", "era": "2023-2026", "note": "Usually just means 'use'.", "sources": ["walterwrites"] },
+        { "term": "streamline", "kind": "word", "era": "2024-2026", "sources": ["walterwrites"] },
+        { "term": "showcase", "kind": "word", "era": "2024-2026", "sources": ["wikipedia_aisigns"] },
+        { "term": "foster", "kind": "word", "era": "2024-2026", "note": "'fostering a sense of'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "enhance", "kind": "word", "era": "2024-2026", "sources": ["wikipedia_aisigns"] },
+        { "term": "landscape", "kind": "word", "era": "2023-2026", "note": "As an abstract noun ('the evolving landscape of').", "sources": ["wikipedia_aisigns", "walterwrites"] },
+        { "term": "realm", "kind": "word", "era": "2023-2026", "note": "'in the realm of'.", "sources": ["walterwrites"] },
+        { "term": "myriad", "kind": "word", "era": "2023-2026", "sources": ["alston"] },
+        { "term": "plethora", "kind": "word", "era": "2023-2026", "sources": ["alston"] },
+        { "term": "nuanced", "kind": "word", "era": "2024-2026", "sources": ["walterwrites"] },
+        { "term": "intricate", "kind": "word", "era": "2023-2026", "note": "Also 'intricacies'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "meticulous", "kind": "word", "era": "2023-2024", "note": "Also 'meticulously'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "vibrant", "kind": "word", "era": "2023-2026", "sources": ["wikipedia_aisigns"] },
+        { "term": "boasts", "kind": "word", "era": "2023-2024", "note": "Meaning 'has'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "bolster", "kind": "word", "era": "2023-2026", "note": "Also 'bolstered'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "garner", "kind": "word", "era": "2023-2024", "sources": ["wikipedia_aisigns"] },
+        { "term": "interplay", "kind": "word", "era": "2023-2026", "sources": ["wikipedia_aisigns"] },
+        { "term": "multifaceted", "kind": "word", "era": "2023-2026", "sources": ["alston"] },
+        { "term": "holistic", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "transformative", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "groundbreaking", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "synergy", "kind": "word", "era": "2023-2026", "note": "Corporate jargon; near-empty of meaning.", "sources": ["alston", "walterwrites"] },
+        { "term": "empower", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "elevate", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "unlock", "kind": "word", "era": "2024-2026", "note": "'unlock the potential of'.", "sources": ["alston"] },
+        { "term": "cutting-edge", "kind": "word", "era": "2024-2026", "sources": ["alston"] },
+        { "term": "paramount", "kind": "word", "era": "2023-2026", "sources": ["alston"] }
+      ]
+    },
+    {
+      "id": "transitions",
+      "label": "Formulaic transitions / signposting",
+      "detector_signal": "sentence-initial n-gram frequency",
+      "description": "Connectors that LLMs stack between nearly every sentence or paragraph, especially at the start of a sentence.",
+      "remediation": "Delete most of them. Let logical order carry the flow, or use a concrete connective phrase tied to the actual argument.",
+      "markers": [
+        { "term": "moreover", "kind": "word", "position": "sentence_start", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "furthermore", "kind": "word", "position": "sentence_start", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "additionally", "kind": "word", "position": "sentence_start", "note": "Especially flagged when it opens a sentence.", "sources": ["wikipedia_aisigns"] },
+        { "term": "consequently", "kind": "word", "position": "sentence_start", "sources": ["walterwrites"] },
+        { "term": "notably", "kind": "word", "position": "sentence_start", "sources": ["walterwrites"] },
+        { "term": "importantly", "kind": "word", "position": "sentence_start", "sources": ["walterwrites"] },
+        { "term": "in conclusion", "kind": "phrase", "sources": ["walterwrites", "aiphrasefinder"] },
+        { "term": "in summary", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "in essence", "kind": "phrase", "sources": ["textsight_how"] },
+        { "term": "ultimately", "kind": "word", "position": "sentence_start", "sources": ["textsight_how"] }
+      ]
+    },
+    {
+      "id": "phrases",
+      "label": "Cliche phrases and stock shells",
+      "detector_signal": "multi-word n-gram frequency",
+      "description": "Fixed multi-word templates that recur across AI drafts regardless of topic.",
+      "remediation": "Cut the shell and state the point directly; replace vague framing with a specific claim or example.",
+      "markers": [
+        { "term": "it is important to note that", "kind": "phrase", "sources": ["walterwrites", "kompozy"] },
+        { "term": "it is worth noting that", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "in today's fast-paced world", "kind": "phrase", "sources": ["kompozy", "walterwrites"] },
+        { "term": "in today's digital age", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "in the ever-evolving", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "when it comes to", "kind": "phrase", "sources": ["aiphrasefinder"] },
+        { "term": "navigating the landscape", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "navigate the complexities", "kind": "phrase", "sources": ["kompozy"] },
+        { "term": "a testament to", "kind": "phrase", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "plays a pivotal role", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "plays a crucial role", "kind": "phrase", "sources": ["wikipedia_aisigns"] },
+        { "term": "underscore the importance", "kind": "phrase", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "the transformative power of", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "seamless integration", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "treasure trove", "kind": "phrase", "sources": ["walterwrites", "aiphrasefinder"] },
+        { "term": "rich tapestry", "kind": "phrase", "sources": ["walterwrites", "wikipedia_aisigns"] },
+        { "term": "game-changer", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "embark on a journey", "kind": "phrase", "sources": ["alston"] },
+        { "term": "let's delve into", "kind": "phrase", "sources": ["aiphrasefinder"] },
+        { "term": "based on the information provided", "kind": "phrase", "sources": ["walterwrites"] },
+        { "term": "setting the stage for", "kind": "phrase", "sources": ["wikipedia_aisigns"] },
+        { "term": "left an indelible mark", "kind": "phrase", "sources": ["wikipedia_aisigns"] },
+        { "term": "stands as a", "kind": "phrase", "note": "Copula-avoidance: 'stands as / serves as' instead of 'is'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "serves as a", "kind": "phrase", "sources": ["wikipedia_aisigns"] }
+      ]
+    },
+    {
+      "id": "structural",
+      "label": "Structural and rhetorical tells",
+      "detector_signal": "structure / classifier features (not simple regex)",
+      "description": "Higher-order patterns detectors and human reviewers use. These require judgement, not just string matching; the checker only estimates the mechanical ones.",
+      "remediation": "Break parallel structures, cut outline-like restatement, replace generic hedging with a real position, and add concrete, specific detail.",
+      "markers": [
+        { "term": "rule_of_three", "kind": "pattern", "note": "Overuse of triples: 'adjective, adjective, adjective' or 'phrase, phrase, and phrase' to make shallow analysis look thorough.", "sources": ["wikipedia_aisigns", "textsight_how"] },
+        { "term": "negative_parallelism", "kind": "pattern", "regex": "\\b(not only\\b[^.]*\\bbut\\b|it's not (just )?[^.]*,? (it's|but))", "note": "'Not only X but Y', 'It's not X, it's Y', 'no X, no Y, just Z'.", "sources": ["wikipedia_aisigns"] },
+        { "term": "undue_emphasis_on_significance", "kind": "pattern", "note": "Sweeping claims about legacy/importance/broader trends ('reflects broader', 'marking a shift', 'evolving landscape').", "sources": ["wikipedia_aisigns"] },
+        { "term": "vague_attribution", "kind": "pattern", "regex": "\\b(studies show|experts (say|agree)|research (suggests|indicates|shows)|it is (widely )?(believed|considered)|some (argue|say)|many believe)\\b", "note": "Unsourced generalization of opinion.", "sources": ["wikipedia_aisigns"] },
+        { "term": "outline_like_conclusion", "kind": "pattern", "note": "Closings that pivot to 'challenges and future prospects' as a canned wrap-up.", "sources": ["wikipedia_aisigns"] },
+        { "term": "inline_header_list", "kind": "pattern", "note": "Bulleted/numbered list where each item starts with a bold header then a colon then description. Very characteristic of chat output.", "sources": ["wikipedia_aisigns"] },
+        { "term": "over_hedging", "kind": "pattern", "regex": "\\b(it depends on your specific needs|there are pros and cons|varies from person to person|both have their (own )?(merits|advantages))\\b", "note": "Relentless neutrality with no stance.", "sources": ["aifreeforever"] }
+      ]
+    },
+    {
+      "id": "punctuation_format",
+      "label": "Punctuation and formatting tells",
+      "detector_signal": "character/formatting statistics",
+      "description": "Typography and formatting habits that recur in LLM output. Each is a weak signal on its own and has legitimate human uses.",
+      "remediation": "Match the surrounding document's conventions; use em dashes sparingly and without surrounding spaces where your style guide dictates; don't bold every keyword.",
+      "markers": [
+        { "term": "em_dash", "kind": "pattern", "regex": "\\s\\u2014\\s|\\u2014", "note": "LLMs use em dashes more than nonprofessional human text of the same genre, often spaced ( — ) and in a formulaic, punched-up way.", "sources": ["wikipedia_aisigns", "textsight_how"] },
+        { "term": "curly_quotes", "kind": "pattern", "regex": "[\\u201c\\u201d\\u2018\\u2019]", "note": "ChatGPT and DeepSeek default to curly quotes/apostrophes; Gemini and Claude usually do not. Also common in professionally typeset human text, so weak alone.", "sources": ["wikipedia_aisigns"] },
+        { "term": "overuse_of_boldface", "kind": "pattern", "regex": "\\*\\*[^*]+\\*\\*", "note": "Mechanically bolding every key term in 'key takeaways' style.", "sources": ["wikipedia_aisigns"] },
+        { "term": "title_case_headings", "kind": "pattern", "note": "Every heading in Title Case, unlike most human sentence-case prose.", "sources": ["wikipedia_aisigns"] },
+        { "term": "emoji_as_formatting", "kind": "pattern", "regex": "[\\u2705\\u274c\\u2b50\\U0001F300-\\U0001FAFF]", "note": "Bullet-point emoji (checkmarks, rockets) used as list markers.", "sources": ["wikipedia_aisigns"] },
+        { "term": "leftover_ai_markup", "kind": "pattern", "regex": "(contentReference|oaicite|oai_citation|turn\\d+search\\d+|:::writing)", "note": "Reference/markup bugs pasted straight from a chatbot. A near-certain tell.", "sources": ["wikipedia_aisigns"] }
+      ]
+    },
+    {
+      "id": "statistical",
+      "label": "Statistical signals",
+      "detector_signal": "perplexity and burstiness",
+      "description": "The two classical metrics behind perplexity/burstiness detectors. True perplexity needs a reference language model; this dataset defines proxies the checker can compute locally.",
+      "remediation": "Raise burstiness by aggressively varying sentence length (drop a 3-8 word sentence between long ones; allow fragments). Raise perplexity with specific, less predictable word choices, not synonym swaps.",
+      "thresholds": {
+        "burstiness_human_typical": "0.65-0.85 (stdev/mean of sentence lengths)",
+        "burstiness_ai_typical": "below 0.30",
+        "ai_sentence_length_cluster_words": "15-22",
+        "note": "Thresholds are indicative, drawn from cited 2026 write-ups, not universal constants."
+      },
+      "markers": [
+        { "term": "low_burstiness", "kind": "metric", "note": "Low standard deviation of sentence length across the passage.", "sources": ["leap_pb", "vortenza_pb", "eyesift_pb"] },
+        { "term": "low_perplexity", "kind": "metric", "note": "Predictable next-word choices. Cannot be measured without a language model; the checker reports proxies (type-token ratio, sentence-length uniformity) and says so.", "sources": ["kompozy", "textsight_how"] }
+      ]
+    }
+  ]
+}
