@@ -1,3 +1,19 @@
+---
+license: mit
+language:
+- en
+pretty_name: AI Writing Markers
+tags:
+- ai-detection
+- writing
+- text-analysis
+- llm
+task_categories:
+- text-classification
+size_categories:
+- n<1K
+---
+
 # ai-writing-markers
 
 A curated, source-backed catalogue of textual markers associated with AI-generated
@@ -35,6 +51,8 @@ that guide and other 2026 sources into a structured, cited dataset.
 | [`SOURCES.md`](SOURCES.md) | Every source, with links. |
 | [`data/`](data/) | Human-readable explainers per category. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add or correct a marker. |
+| [`space/`](space/) | Gradio app for the Hugging Face Space demo. |
+| [`HUGGINGFACE.md`](HUGGINGFACE.md) | How to publish as an HF Dataset and Space. |
 
 ## Marker categories
 
@@ -55,6 +73,12 @@ that guide and other 2026 sources into a structured, cited dataset.
 6. **Statistical signals** — low **perplexity** (predictable word choice) and low
    **burstiness** (uniform sentence length), the two metrics classical detectors
    lean on.
+
+## Also on Hugging Face
+
+This repo doubles as a Hugging Face **Dataset** (the marker catalogue) and powers a
+Gradio **Space** (a live checker). See [`HUGGINGFACE.md`](HUGGINGFACE.md) for one-command
+publishing steps.
 
 ## Install
 
@@ -80,7 +104,7 @@ python3 check.py essay.md --json
 
 Example (an intentionally AI-flavoured sentence):
 
-```
+```text
 $ echo "In today's fast-paced world, we must delve into the rich tapestry of innovation." | python3 check.py -
   Overused vocabulary: 2 hit(s)
       - delve: 1

@@ -1,0 +1,7 @@
+# These are copied in from the repo root at publish time by build.sh.
+# Kept out of git here to avoid duplicating the dataset / checker in two places.
+markers.json
+check.py
+__pycache__/
+*.pyc
+.gradio/
